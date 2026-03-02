@@ -1,6 +1,11 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const app = require("./app");
+const express = require("express");
+
+const app = express();
+app.use(express.json());
+
+app.use("/transaction", require("./routes/transaction.routes"));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Atlas connected"))
@@ -9,3 +14,4 @@ mongoose.connect(process.env.MONGO_URI)
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server running");
 });
+
