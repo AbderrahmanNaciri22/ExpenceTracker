@@ -9,9 +9,6 @@ router.get("/", controller.getAll);
 
 router.post("/",controller.ajouter);
 
-router.get("/:type", controller.filterByType)
-
-
 router.get("/filter", controller.filterByType);
 
 module.exports = router;
