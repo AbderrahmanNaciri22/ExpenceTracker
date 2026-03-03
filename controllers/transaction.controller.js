@@ -35,6 +35,19 @@ exports.deleteTransaction = async (req, res) => {
 
 }
 
+exports.updateTransaction = async (req, res) => {
+  try{
+    const update = await Transaction.findByIdAndUpdate(req.params.id,req.body,{ new: true, runValidators: true });
+
+    if(!update){
+      return res.status(404).json("not found");
+    }
+
+    res.json(update);
+  }catch{
+     res.status(400).json({ error: error.message });
+  }
+}
 
 
 exports.filterByType = async (req, res) => {

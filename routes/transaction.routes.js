@@ -9,7 +9,9 @@ router.get("/", controller.getAll);
 
 router.post("/",controller.ajouter);
 
-router.delete("/delete/:id",controller.deleteTransaction);
+router.delete("/:id",controller.deleteTransaction);
+router.put("/:id",controller.updateTransaction);
+
 
 
 router.get("/filter", controller.filterByType);
