@@ -10,6 +10,8 @@ router.get("/ajoute", controller.test);
 
 router.post("/seed",controller.ajouter);
 
+router.get("/:type", controller.filterByType)
+
 
 
 module.exports = router;
