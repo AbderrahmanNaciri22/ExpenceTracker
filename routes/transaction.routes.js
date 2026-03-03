@@ -6,23 +6,10 @@ const controller = require("../controllers/transaction.controller");
 
 
 
-router.get("/", controller.test);
+router.get("/ajoute", controller.test);
+
+router.post("/seed",controller.ajouter);
+
+
 
 module.exports = router;
-
-
-
-
-// router.get("/seed", async (req, res) => {
-//   const Transaction = require("../models/Transaction");
-
-//   const data = await Transaction.create({
-//     title: "Salary",
-//     amount: 3000,
-//     type: "income",
-//     date: new Date()
-//   });
-
-//   res.json(data);
-// });
-
