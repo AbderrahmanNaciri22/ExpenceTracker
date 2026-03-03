@@ -6,6 +6,8 @@ const app = express();
 app.use(express.json());
 
 app.use("/transaction", require("./routes/transaction.routes"));
+app.use("/category", require("./routes/category.routes"));
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Atlas connected"))
