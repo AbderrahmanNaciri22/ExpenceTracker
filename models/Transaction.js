@@ -17,9 +17,11 @@ const transactionSchema = new mongoose.Schema({
     required: true
   },
   category:{
-    type:String,
-    required: function() { return this.type = "expense" },
-    enum:["sport","food","clothing","transport","rent"]
+    type: String,
+    required: function () {
+      return this.type === "expense";
+    }
+    
   },
   
   date: {

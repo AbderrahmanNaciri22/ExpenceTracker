@@ -6,9 +6,9 @@ const controller = require("../controllers/transaction.controller");
 
 
 
-router.get("/ajoute", controller.test);
+router.get("/", controller.getAll);
 
-router.post("/seed",controller.ajouter);
+router.post("/",controller.ajouter);
 
 router.get("/:type", controller.filterByType)
 

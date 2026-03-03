@@ -1,24 +1,27 @@
-exports.test = (req, res) => {
-  res.json({ message: "Transaction route is working!" });
-};
+ const Transaction = require("../models/Transaction");
 
+exports.getAll = async (req, res) => {
+  const data = await Transaction.find().sort({ date: -1 });
+  res.json({ data });
+};
 exports.ajouter = async (req, res) => {
-  const Transaction = require("../models/Transaction");
+ 
+    const { title, amount, category,type,date } = req.body;
 
   const data = await Transaction.create({
-    title: "Salary",
-    amount: 3000,
-    category: "sport",
-    type: "expense",
+    title: title,
+    amount: amount,
+    category: category,
+    type: type,
     createdAt: "",
-    date: new Date(),
+    date: date,
   });
-  res.json({ message: "Is created !!" });
+  res.status(201).json({ message: "Is created !!" });
 };
+
 
 exports.filterByType = async (req, res) => {
   try {
-    const Transaction = require("../models/Transaction");
     const { type } = req.query;
     const filter = {};
     if (type) {
