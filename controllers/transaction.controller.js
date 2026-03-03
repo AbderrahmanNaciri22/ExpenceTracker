@@ -31,9 +31,9 @@ exports.filterByType = async (req, res) => {
     // select * from Transaction WHERE  type="income";
     const transactions = await Transaction.find(filter).sort({ date: -1 });
 
-    res.status(201, "is good");
+    res.status(201).json(transactions);
   } catch (err) {
-    res.status(400, "not working");
+    res.status(400).json("not working");
     // next(err);
   }
 };

@@ -1,5 +1,4 @@
-
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/transaction.controller");
 
@@ -13,5 +12,6 @@ router.post("/",controller.ajouter);
 router.get("/:type", controller.filterByType)
 
 
+router.get("/filter", controller.filterByType);
 
 module.exports = router;
