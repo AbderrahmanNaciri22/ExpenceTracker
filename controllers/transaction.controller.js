@@ -16,3 +16,20 @@ exports.ajouter = async (req, res) => {
   res.json({ message: "Is created !!" });
 
 }
+
+exports.filterByType = async(req, res) => {
+  try {
+    const Transaction = require("../models/Transaction");
+    const {type} = req.query
+    const filter = {}
+    if(type){
+      filter.type = type
+    }
+
+    // select * from Transaction WHERE  type="income";
+    const transactions = await Transaction.find(filter).sort({date : -1})
+  }catch(err){
+    next(err)
+  }
+
+}
