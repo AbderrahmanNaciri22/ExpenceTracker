@@ -2,7 +2,7 @@
 
 exports.getAll = async (req, res) => {
   const data = await Transaction.find().sort({ date: -1 });
-  res.json({ data });
+  return res.json({ data });
 };
 exports.ajouter = async (req, res) => {
  
@@ -16,8 +16,25 @@ exports.ajouter = async (req, res) => {
     createdAt: "",
     date: date,
   });
-  res.status(201).json({ message: "Is created !!" });
+  return res.status(201).json({ message: "Is created !!" });
 };
+
+exports.deleteTransaction = async (req, res) => {
+  try{
+      const deleted = await Transaction.findByIdAndDelete(req.params.id);
+
+  if(!deleted){
+        return res.status(404).json({ message: "Not found" });
+  }
+  res.json({ message: "Deleted successfully" });
+
+  }catch{
+        res.status(400).json({ error: "Invalid ID" });
+  }
+
+
+}
+
 
 
 exports.filterByType = async (req, res) => {

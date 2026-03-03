@@ -9,6 +9,9 @@ router.get("/", controller.getAll);
 
 router.post("/",controller.ajouter);
 
+router.delete("/delete/:id",controller.deleteTransaction);
+
+
 router.get("/filter", controller.filterByType);
 
 module.exports = router;
