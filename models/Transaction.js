@@ -18,6 +18,7 @@ const transactionSchema = new mongoose.Schema({
   },
   category:{
     type: String,
+    enum:["sport","food","shooping","rent","billing"],
     required: function () {
       return this.type === "expense";
     }

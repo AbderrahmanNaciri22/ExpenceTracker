@@ -6,9 +6,9 @@ const blanceVerifyAndCategoryCheck = require("../middleware/balance.middleware")
 
 
 
-router.get("/",blanceVerifyAndCategoryCheck ,controller.getAll);
+router.get("/",controller.getAll);
 
-router.post("/",controller.ajouter);
+router.post("/",blanceVerifyAndCategoryCheck,controller.ajouter);
 
 router.delete("/:id",controller.deleteTransaction);
 router.put("/:id",controller.updateTransaction);
