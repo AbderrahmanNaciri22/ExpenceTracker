@@ -1,5 +1,6 @@
- const Transaction = require("../models/Transaction");
 
+ const Transaction = require("../utils/export.util")
+ 
 exports.getAll = async (req, res) => {
   const data = await Transaction.find().sort({ date: -1 });
   return res.json({ data });
@@ -37,7 +38,7 @@ exports.deleteTransaction = async (req, res) => {
 
 exports.updateTransaction = async (req, res) => {
   try{
-    const update = await Transaction.findByIdAndUpdate(req.params.id,req.body,{ new: true, runValidators: true });
+    const update = await Transaction.findByIdAndUpdate(req.params.id,req.body,{ new: true });
 
     if(!update){
       return res.status(404).json("not found");
