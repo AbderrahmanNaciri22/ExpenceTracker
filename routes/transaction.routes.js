@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/transaction.controller");
-const blanceVerifyAndCategoryCheck = require("../utils/export.util")
+const blanceVerifyAndCategoryCheck = require("../middleware/balance.middleware")
 
 
 
 
-router.get("/", controller.getAll);
+router.get("/",blanceVerifyAndCategoryCheck ,controller.getAll);
 
 router.post("/",controller.ajouter);
 
