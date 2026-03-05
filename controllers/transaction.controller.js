@@ -8,6 +8,23 @@ function buildPagination(page, pageSize) {
   return { currentPage, skip };
 }
 
+async function getTotalEpenseIncombymonthes(type,month,year) {
+    const transactions = await Transaction.find({ type: type }).sort({ date: -1 });
+    let total = 0;
+
+    transactions.forEach(t => {
+       const yearandmonth = (t.date.toISOString().slice(0,7));
+      //  console.log( month+"-"+year);
+       if(yearandmonth == year+"-"+month){
+          // console.log(yearandmonth);
+          total += t.amount
+       }
+    });
+    return total
+    // return date;
+}
+
+
 exports.getAll = async (req, res) => {
   try {
     const { currentPage, skip } = buildPagination(req.query.page, per_page);
@@ -76,6 +93,7 @@ exports.updateTransaction = async (req, res) => {
 
 exports.filterByType = async (req, res) => {
   try {
+    const { currentPage, skip } = buildPagination(req.query.page, per_page);
     const { type } = req.query;
     const filter = {};
     if (type) {
@@ -83,7 +101,7 @@ exports.filterByType = async (req, res) => {
     }
 
     // Pagination
-    const { currentPage, skip } = buildPagination(req.query.page, per_page);
+    
     const total = await Transaction.countDocuments(filter);//calcul dyel total lly filtré
     const transactions = await Transaction.find(filter)// select * from Transaction WHERE  type="income";
       .sort({ date: -1 })
@@ -102,3 +120,16 @@ exports.filterByType = async (req, res) => {
     // next(err);
   }
 };
+
+exports.stats = async (req,res) => {
+      const {month , year ,type } = req.query;
+      let total = 0
+      total = await getTotalEpenseIncombymonthes(type,month,year);
+      if(type == "income"){
+        return res.status(200).json("total des revenus par mois = "+total)
+      }else{
+        return res.status(200).json("total des depenses par mois = "+total)
+
+      }
+      
+}

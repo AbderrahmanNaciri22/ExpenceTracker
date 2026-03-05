@@ -6,6 +6,8 @@ const blanceVerifyAndCategoryCheck = require("../middleware/balance.middleware")
 router.get("/", controller.getAll);
 
 router.get("/filter", controller.filterByType);
+router.get("/stats", controller.stats);
+
 
 router.post("/", blanceVerifyAndCategoryCheck, controller.ajouter);
 

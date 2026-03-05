@@ -15,6 +15,9 @@ async function getTotalExpense(type) {
 
 
 async function blanceVerifyAndCategoryCheck(req, res, next) {
+        if(!req.body){
+            return res.status(404).json("Body required")
+        }
          let totalExpense = await getTotalExpense("expense");
          let totalIncome = await getTotalExpense("income");
 
