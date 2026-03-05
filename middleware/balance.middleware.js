@@ -23,16 +23,19 @@ async function blanceVerifyAndCategoryCheck(req, res, next) {
          console.log(blance);
         const {title,amount,type,category,date,} = req.body;
         if(type == "expense"){
-        if(blance<amount){
-            return res.status(404).json("Balance not enough")
-        };
+            if(blance<amount){
+                return res.status(400).json("Balance not enough")
+            };
+            if(!category){
+                return res.status(400).json("category obligatoire")
+            }
         }
 
         if(!title){
-            return res.send("title vide")
+            return res.status(400).json("title obligatoire")
         }
         if(parseInt(amount) < 0){
-            return res.send("amount not positive ");
+            return res.status(400).json("amount not positive ");
         }
         if (!dateRegex.test(date)) {
             return res.status(400).json({ message: "Date must be yyyy/mm/dd" });

@@ -16,15 +16,27 @@ const transactionSchema = new mongoose.Schema({
     enum: ["income", "expense"],
     required: true
   },
-  category:{
-    type: String,
-    enum:["sport","food","shooping","rent","billing"],
-    required: function () {
-      return this.type === "expense";
-    }
-    
+category: {
+  type: String,
+
+  required: function () {
+    return this.type === "expense";
   },
-  
+
+    validate: {
+      validator: function (value) {
+
+        if (this.type === "expense") {
+          const allowed = ["sport", "food", "shooping", "rent", "billing"];
+          return allowed.includes(value);
+        }
+
+        return true;
+      },
+
+      message: "Category must be sport, food, shooping, rent or billing"
+    }
+  },
   date: {
     type: Date,
     required: true
