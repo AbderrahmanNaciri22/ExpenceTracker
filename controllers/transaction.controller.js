@@ -169,7 +169,7 @@ exports.stats = async (req,res) => {
       }else if(!type&&!category){
         return res.status(200).json("solde du mois est = "+total)
       }else if(category){
-        return res.status(200).json("total de category  "+category+" est ="+ +total)
+        return res.status(200).json("total de category  "+category+" est ="+total)
       }
       
 }
