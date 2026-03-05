@@ -8,18 +8,55 @@ function buildPagination(page, pageSize) {
   return { currentPage, skip };
 }
 
-async function getTotalEpenseIncombymonthes(type,month,year) {
-    const transactions = await Transaction.find({ type: type }).sort({ date: -1 });
-    let total = 0;
-
-    transactions.forEach(t => {
-       const yearandmonth = (t.date.toISOString().slice(0,7));
-      //  console.log( month+"-"+year);
-       if(yearandmonth == year+"-"+month){
-          // console.log(yearandmonth);
-          total += t.amount
-       }
+async function getTotalExpenseIncombymonthes(type,month,year,category) {
+  let transactions;
+  let total = 0;
+  let incomeTotal=0 
+  let expenseTotal = 0;
+    if(type){
+      transactions = await Transaction.find({ type: type }).sort({ date: -1 });
+      transactions.forEach(t => {
+        const yearandmonth = (t.date.toISOString().slice(0,7));
+        //  console.log( month+"-"+year);
+        if(yearandmonth == year+"-"+month){
+            // console.log("tesssss ======"+yearandmonth);
+            // total += t.amount
+            if(t.type == "expense"){
+              expenseTotal += t.amount 
+            }else if(t.type == "income")
+            {
+              incomeTotal += t.amount 
+            }
+        }
+  
     });
+          if(expenseTotal){
+          total = expenseTotal;
+        }else{
+             total = incomeTotal;
+
+        }
+    }else if(year&&month){
+      const start = new Date(year, month - 1, 1);
+      const end = new Date(year, month, 1);
+      transactions = await Transaction.find({ date: { $gte: start, $lt: end} });
+       transactions.forEach(t => {
+            if(t.type == "expense"){
+              expenseTotal += t.amount 
+            }else if(t.type == "income")
+            {
+              incomeTotal += t.amount 
+            }
+        })
+            total = incomeTotal - expenseTotal;
+    }else if(category){
+        transactions = await Transaction.find({ category: category });
+        transactions.forEach(t =>{
+         total += t.amount;
+        })
+    }
+
+
     return total
     // return date;
 }
@@ -122,14 +159,17 @@ exports.filterByType = async (req, res) => {
 };
 
 exports.stats = async (req,res) => {
-      const {month , year ,type } = req.query;
+      const {month , year ,type,category } = req.query;
       let total = 0
-      total = await getTotalEpenseIncombymonthes(type,month,year);
+      total = await getTotalExpenseIncombymonthes(type,month,year,category);
       if(type == "income"){
         return res.status(200).json("total des revenus par mois = "+total)
-      }else{
+      }else if(type == "expense"){
         return res.status(200).json("total des depenses par mois = "+total)
-
+      }else if(!type&&!category){
+        return res.status(200).json("solde du mois est = "+total)
+      }else if(category){
+        return res.status(200).json("total de category  "+category+" est ="+ +total)
       }
       
 }
