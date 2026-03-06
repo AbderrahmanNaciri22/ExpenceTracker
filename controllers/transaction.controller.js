@@ -13,6 +13,7 @@ async function getTotalExpenseIncombymonthes(type,month,year,category) {
   let total = 0;
   let incomeTotal=0 
   let expenseTotal = 0;
+  let i = 0;
     if(type){
       transactions = await Transaction.find({ type: type }).sort({ date: -1 });
       transactions.forEach(t => {
@@ -54,6 +55,46 @@ async function getTotalExpenseIncombymonthes(type,month,year,category) {
         transactions.forEach(t =>{
          total += t.amount;
         })
+    }else{
+          const result = await Transaction.aggregate([
+      {
+        $match: { type: "expense" }
+      },
+      {
+        $group: {
+          _id: "$category",
+          totalAmount: { $sum: "$amount" }
+        }
+      },
+      {
+        $group: {
+          _id:null,
+          categories: {
+            $push: {
+              category: "$_id",
+              amount: "$totalAmount"
+            }
+          },
+          totalExpenses: { $sum: "$totalAmount" }
+        }
+      },
+      {
+        $unwind: "$categories"
+      },
+      {
+        $project: {
+          category: "$categories.category",
+          amount: "$categories.amount",
+          percentage: {
+            $multiply: [
+              { $divide: ["$categories.amount", "$totalExpenses"] },
+              100
+            ]
+          }
+        }
+      }
+    ]);
+    return result;
     }
 
 
@@ -160,16 +201,20 @@ exports.filterByType = async (req, res) => {
 
 exports.stats = async (req,res) => {
       const {month , year ,type,category } = req.query;
-      let total = 0
+      let total = 0;
+      let result;
       total = await getTotalExpenseIncombymonthes(type,month,year,category);
       if(type == "income"){
         return res.status(200).json("total des revenus par mois = "+total)
       }else if(type == "expense"){
         return res.status(200).json("total des depenses par mois = "+total)
-      }else if(!type&&!category){
+      }else if(month && year){
         return res.status(200).json("solde du mois est = "+total)
       }else if(category){
         return res.status(200).json("total de category  "+category+" est ="+total)
+      }else{
+              result = await getTotalExpenseIncombymonthes(type,month,year,category);
+           return res.status(200).json(result)
       }
       
 }
