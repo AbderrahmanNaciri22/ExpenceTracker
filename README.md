@@ -1,11 +1,11 @@
 # Expense Tracker API
 
-Backend API for managing personal expenses with authentication and secure user access.
+Backend API for managing personal expenses with transaction tracking, filtering, and statistics.
 
 ## Overview
 
-Expense Tracker is a backend service that allows users to track and manage their expenses.  
-The system provides authentication, protected routes, and CRUD operations for expense management.
+Expense Tracker is a backend service that allows users to manage their financial transactions.  
+The system provides endpoints to create, update, delete, filter, and analyze expenses.
 
 ## Tech Stack
 
@@ -13,46 +13,74 @@ The system provides authentication, protected routes, and CRUD operations for ex
 - Express.js
 - MongoDB
 - Mongoose
-- JWT Authentication
-- bcrypt
-- Express Middleware
+- Middleware architecture
+- REST API
 
 ## Features
 
-### Authentication
+### Transaction Management
 
-Users can create an account and log in securely.
+Users can manage financial transactions.
 
-**Registration**
-- name
-- email
-- password (hashed with bcrypt)
+Each transaction contains:
 
-**Login**
-- email
-- password
+- `title`
+- `amount`
+- `type` (income | expense)
+- `category`
+- `date`
+- `createdAt`
 
-Successful login returns a **JWT token** used to access protected routes.
+### Validation
 
-### Protected Routes
+A middleware verifies:
 
-Expense operations require authentication.
+- balance constraints
+- category validity before inserting a transaction
 
-Authentication middleware:
+## Transaction Routes
 
-- verifies JWT token
-- identifies the logged-in user
-- blocks unauthorized requests
+| Method | Endpoint | Middleware | Description |
+|------|------|------|------|
+| GET | `/transactions` | — | Get all transactions |
+| GET | `/transactions/filter` | — | Filter transactions by type |
+| GET | `/transactions/stats` | — | Get statistics about transactions |
+| POST | `/transactions` | blanceVerifyAndCategoryCheck | Create transaction |
+| PUT | `/transactions/:id` | — | Update transaction |
+| DELETE | `/transactions/:id` | — | Delete transaction |
 
-## Expense Management
+## Route Description
 
-Users can manage their personal expenses.
+**GET /transactions**
 
-Each expense contains:
+Returns the list of all transactions.
 
-- title
-- amount
-- category
-- date
-- userId
-- createdAt
+**GET /transactions/filter**
+
+Returns transactions filtered by type (income or expense).
+
+**GET /transactions/stats**
+
+Returns aggregated statistics about transactions.
+
+Examples:
+- total income
+- total expenses
+- balance
+
+**POST /transactions**
+
+Creates a new transaction.
+
+Middleware checks:
+- balance rules
+- category validity
+
+**PUT /transactions/:id**
+
+Updates an existing transaction.
+
+**DELETE /transactions/:id**
+
+Deletes a transaction.
+
