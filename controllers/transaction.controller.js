@@ -99,7 +99,7 @@ async function getTotalExpenseIncombymonthes(type,month,year,category) {
 
 
     return total
-    // return date;
+
 }
 
 
@@ -126,7 +126,7 @@ exports.getAll = async (req, res) => {
 
 exports.ajouter = async (req, res) => {
   const { title, amount, category, type, date } = req.body;
-
+//promose
   const data = await Transaction.create({
     title: title,
     amount: amount,
@@ -153,11 +153,7 @@ exports.deleteTransaction = async (req, res) => {
 
 exports.updateTransaction = async (req, res) => {
   try {
-    const update = await Transaction.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true },
-    );
+    const update = await Transaction.findByIdAndUpdate(req.params.id,req.body,{ new: true },);
 
     if (!update) {
       return res.status(404).json("not found");

@@ -4,7 +4,8 @@ const express = require("express");
 
 const app = express();
 app.use(express.json());
-
+app.use(function (req,res,next){
+  console.log("test");next()})
 app.use("/transaction", require("./routes/transaction.routes"));
 
 
